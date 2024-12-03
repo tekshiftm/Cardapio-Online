@@ -1,125 +1,116 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Trash2, X } from 'lucide-react';
-import { CartItem } from '../types';
+import { CartItem } from '../types/menu';
 
-interface CartProps {
+interface Props {
   items: CartItem[];
-  onUpdateQuantity: (productId: number, newQuantity: number) => void;
-  onRemoveItem: (productId: number) => void;
-  onFinishOrder: () => void;
-  isOpen: boolean;
-  onClose: () => void;
+  onUpdateQuantity: (id: number, quantity: number) => void;
+  onRemoveItem: (id: number) => void;
+  onFinalize: () => void;
 }
 
-export function Cart({ 
-  items, 
-  onUpdateQuantity, 
-  onRemoveItem, 
-  onFinishOrder,
-  isOpen,
-  onClose
-}: CartProps) {
-  const total = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
-  
-  const formattedTotal = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(total);
+export function Cart({ items, onUpdateQuantity, onRemoveItem, onFinalize }: Props) {
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  if (!isOpen) return null;
+  // Calcula o total de itens no carrinho
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 md:flex md:justify-end">
-      <div className="bg-white w-full md:w-[400px] h-full flex flex-col">
-        <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white z-10">
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="text-green-500" />
-            <h2 className="text-xl font-semibold">Seu Pedido</h2>
-          </div>
-          <button 
-            onClick={onClose} 
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            aria-label="Fechar carrinho"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        
-        <div className="flex-1 overflow-auto p-4">
-          {items.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center p-4">
-              <ShoppingCart size={48} className="text-gray-300 mb-4" />
-              <p className="text-gray-500">Seu carrinho está vazio</p>
-              <button
-                onClick={onClose}
-                className="mt-4 text-green-500 font-medium hover:text-green-600"
-              >
-                Continuar comprando
-              </button>
+    <>
+      {/* Botão flutuante para abrir o carrinho */}
+      <button
+        onClick={() => setIsCartOpen(true)}
+        className="fixed bottom-4 right-4 bg-orange-500 text-white p-3 rounded-full shadow-lg hover:bg-orange-600 focus:outline-none z-50"
+        aria-label="Abrir Carrinho"
+      >
+        <ShoppingCart size={24} />
+        {/* Badge com a quantidade de itens no carrinho */}
+        {totalItems > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+            {totalItems}
+          </span>
+        )}
+      </button>
+
+      {/* Carrinho deslizante */}
+      <div
+        className={`fixed top-0 right-0 h-full bg-white shadow-lg border-l p-4 w-80 sm:w-96 transform transition-transform ${
+          isCartOpen ? 'translate-x-0' : 'translate-x-full'
+        } z-40`}
+      >
+        <div className="max-h-full overflow-y-auto">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="text-orange-500" />
+              <h2 className="text-lg font-semibold">Seu Pedido</h2>
             </div>
+            {/* Botão para fechar o carrinho */}
+            <button
+              onClick={() => setIsCartOpen(false)}
+              className="text-gray-500 hover:text-gray-700"
+              aria-label="Fechar Carrinho"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {items.length === 0 ? (
+            <p className="text-gray-500">Seu carrinho está vazio.</p>
           ) : (
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.product.id} className="flex items-center gap-4 bg-gray-50 p-3 rounded-lg">
-                  <img 
-                    src={item.product.image} 
-                    alt={item.product.name} 
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium truncate">{item.product.name}</h3>
-                    <p className="text-green-600 font-medium">
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                      }).format(item.product.price)}
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
+            <>
+              <div className="space-y-2 mb-4">
+                {items.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center border rounded">
+                        <button
+                          className="px-2 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                          disabled={item.quantity <= 1}
+                          aria-label={`Diminuir quantidade de ${item.name}`}
+                        >
+                          -
+                        </button>
+                        <span className="px-2">{item.quantity}</span>
+                        <button
+                          className="px-2 py-1 hover:bg-gray-100"
+                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                          aria-label={`Aumentar quantidade de ${item.name}`}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <span>{item.name}</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span>R$ {(item.price * item.quantity).toFixed(2)}</span>
                       <button
-                        onClick={() => onUpdateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
-                        disabled={item.quantity <= 1}
-                        aria-label="Diminuir quantidade"
+                        onClick={() => onRemoveItem(item.id)}
+                        className="text-red-500 hover:text-red-700"
+                        aria-label={`Remover ${item.name}`}
                       >
-                        -
-                      </button>
-                      <span className="w-8 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300 transition-colors"
-                        aria-label="Aumentar quantidade"
-                      >
-                        +
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </div>
-                  <button
-                    onClick={() => onRemoveItem(item.product.id)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
-                    aria-label="Remover item"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-bold">Total: R$ {total.toFixed(2)}</div>
+                <button
+                  onClick={onFinalize}
+                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+                  aria-label="Finalizar Pedido"
+                >
+                  Finalizar Pedido
+                </button>
+              </div>
+            </>
           )}
         </div>
-        
-        <div className="border-t p-4 bg-white sticky bottom-0">
-          <div className="flex justify-between items-center mb-4">
-            <span className="font-semibold">Total:</span>
-            <span className="text-xl font-bold text-green-600">{formattedTotal}</span>
-          </div>
-          <button
-            onClick={onFinishOrder}
-            disabled={items.length === 0}
-            className="w-full bg-green-500 text-white py-4 rounded-lg font-medium hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Finalizar Pedido
-          </button>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
