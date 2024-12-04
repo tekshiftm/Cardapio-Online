@@ -1,13 +1,249 @@
-<!doctype html>
-<html lang="en">
-  <head>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cardápio Online</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="./src/main.tsx"></script>
-  </body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon">
+    <title>SPACE BURGER | Lanchonete</title>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="content">
+            <a href="#" id="logo">SPACE BURGER</a>
+            <!-- PC -->
+            <div class="items">
+                <a href="#about">
+                    Sobre
+                </a>
+                <a href="#menu">
+                    Cardápio
+                </a>
+            </div>
+            <div class="icons">
+                <a href="./view/cart.html">
+                    <span class="iconify-inline" data-icon="mdi:cart-variant"></span>
+                    Carrinho
+                    <div class="cartNotify"></div>
+                </a>
+            </div>            
+            <!-- MOBILE -->
+            <div class="btnMobile">
+                <span class="iconify-inline" data-icon="cil:burger"></span>
+            </div>
+        </div>
+        <div class="itemsMobile">
+            <a href="#about">
+                Sobre
+            </a>
+            <a href="#menu">
+                Cardápio
+            </a>
+            <div class="icons">
+                <a href="./view/cart.html">
+                    <span class="iconify-inline" data-icon="mdi:cart-variant"></span>
+                    Carrinho
+                    <div class="cartNotify"></div>
+                </a>
+            </div>            
+        </div>
+    </div>
+    <!-- BANNER -->
+    <div class="banner">
+        <div class="bannerContent">
+            <div>
+                <h1>Um universo de <span>sabores</span>.</h1>
+                <p id="subtitle">Que tal experimentar lanches deliciosos por um preço que cabe no seu bolso? Clique no
+                    botão abaixo e peça já!</p>
+                <a href="#menu" class="btn">Cardápio</a>
+                <div class="social">
+                    <a href="#">
+                        <span class="iconify" data-icon="brandico:facebook"></span>
+                    </a>
+                    <a href="#">
+                        <span class="iconify" data-icon="akar-icons:instagram-fill"></span>
+                    </a>
+                    <a href="#">
+                        <span class="iconify" data-icon="akar-icons:twitter-fill"></span>
+                    </a>
+                </div>
+            </div>
+            <img src="./img/burger.png" alt="Imagem de um lanche">
+        </div>
+    </div>
+    <!-- ITEMS -->
+    <div class="items container">
+        <div class="cardItems">
+            <span class="iconify" data-icon="ph:tote-duotone"></span>
+            <h4>Escolha os produtos</h4>
+            <p>Escolha todos os produtos que deseja comprar clicando no botão 'Adicionar'.</p>
+        </div>
+        <div class="cardItems">
+            <span class="iconify" data-icon="ph:circle-wavy-check-duotone"></span>
+            <h4>Verifique o carrinho</h4>
+            <p>Verifique se todos os produtos estão no carrinho de compras.</p>
+        </div>
+        <div class="cardItems">
+            <span class="iconify" data-icon="ph:wallet-duotone"></span>
+            <h4>Envie o pedido</h4>
+            <p>Após verificar os itens, você enviará o pedido no WhatsApp da lanchonete com um simples clique.</p>
+        </div>
+    </div>
+    <!-- ABOUT MENU ONLINE -->
+    <!-- <div id="about">
+        <div class="container">
+            <h3>Cardápio online</h3>
+            <p>Seja bem-vindo ao cardápio online da lanchonete <span>SPACE BURGER</span>!</p>
+            <p>Este aplicativo web tem o intuito de facilitar os pedidos, possibilitando uma seleção prática e rápida
+                dos produtos desejados e enviando-os para o WhatsApp da lanchonete, aumentando seu conforto e
+                simplificando o pedido!</p>
+        </div>
+    </div> -->
+    <!-- MENU -->
+    <div id="menu" class="container">
+        <h3>Cardápio</h3>
+        <div class="linksMenu">
+            <button href="#" class="linkMenu active" id="showAll">Tudo</button>
+            <button href="#" class="linkMenu" id="showSnacks">Lanches</button>
+            <button href="#" class="linkMenu" id="showCombos">Combos</button>
+            <button href="#" class="linkMenu" id="showPortions">Porções</button>
+            <button href="#" class="linkMenu" id="showDrinks">Bebidas</button>
+        </div>
+        <div class="cardsMenu" id="showMenu">
+            <!-- ITEMS MENU -->
+        </div>
+    </div>
+    <!-- PROMOTIONS -->
+    <!-- <div id="promotions">
+        <div class="container">
+            <h3>Promoções do dia</h3>
+            <div class="cardsMenu" id="showPromotions">
+                 ITEMS MENU 
+             </div>
+        </div>
+    </div> -->
+    <!-- SERVICE -->
+    <div id="service" class="container">
+        <h3>Atendimento</h3>
+        <div class="locAndCont">
+            <div class="cardLAC">
+                <div class="circle">
+                    <span class="iconify-inline" data-icon="akar-icons:location"></span>
+                </div>
+                <p>Rua dos Famintos, nº 100<br>Famintoslândia (SP)</p>
+            </div>
+            <div class="cardLAC">
+                <div class="circle">
+                    <span class="iconify-inline" data-icon="akar-icons:phone"></span>
+                </div>
+                <p>Telefone de contato e Whatsapp<br>(14) 99123-4567</p>
+            </div>
+
+        </div>
+        <div class="days">
+            <div class="cardDays">
+                <h5>Dom</h5>
+                <p>19h às 00h</p>
+            </div>
+            <div class="cardDays">
+                <h5>Seg</h5>
+                <p>Fechado</p>
+            </div>
+            <div class="cardDays">
+                <h5>Ter</h5>
+                <p>Fechado</p>
+            </div>
+            <div class="cardDays">
+                <h5>Qua</h5>
+                <p>19h às 00h</p>
+            </div>
+            <div class="cardDays">
+                <h5>Qui</h5>
+                <p>19h às 00h</p>
+            </div>
+            <div class="cardDays">
+                <h5>Sex</h5>
+                <p>19h às 00h</p>
+            </div>
+            <div class="cardDays">
+                <h5>Sáb</h5>
+                <p>19h às 00h</p>
+            </div>
+        </div>
+    </div>
+    <!-- BOTÃO FLUTUANTE DO CARRINHO -->
+<div id="floatingCart" onclick="redirectToCart()">
+    <span class="iconify" data-icon="mdi:cart-variant"></span>
+    <span id="cartCount">0</span>
+</div>
+
+<!-- BOTÃO FLUTUANTE DO CARRINHO -->
+<div id="floatingCart" onclick="redirectToCart()">
+    <span class="iconify" data-icon="mdi:cart-variant"></span>
+</div>
+
+<script>
+    // Redireciona para a página do carrinho
+    function redirectToCart() {
+        window.location.href = './view/cart.html';
+    }
+</script>
+
+
+    <!-- MAP -->
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.8357706350203!2d-39.01840102592028!3d-4.966951650724721!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7be9fb9725b7e6f%3A0xc2a2e2db9cd3c738!2sAv.%20Pl%C3%A1cido%20Castelo%2C%202172%20-%20Centro%2C%20Quixad%C3%A1%20-%20CE%2C%2063900-162!5e0!3m2!1spt-BR!2sbr!4v1733285468726!5m2!1spt-BR!2sbr%22%20width=%22600%22%20height=%22450%22%20style=%22border:0;%22%20allowfullscreen=%22%22%20loading=%22lazy%22%20referrerpolicy=%22no-referrer-when-downgrade%22"
+        class="map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <!-- FOOTER -->
+    <div class="footerTop">
+        <div class="content">
+            <p id="logo">SPACE BURGER</p>
+            <div>
+                <h4>Quem somos</h4>
+                <p>Somos uma empresa do ramo alimentício presente no mercado desde 2015 com serviços e produtos de ótima
+                    qualidade.</p>
+            </div>
+            <div class="links">
+                <h4>Links úteis</h4>
+                <a href="#">Saiba mais</a>
+                <a href="#">Sobre nós</a>
+                <a href="#">Nossos valores</a>
+                <a href="#">Termos de uso</a>
+            </div>
+        </div>
+    </div>
+    <div class="footerBottom">
+        <div class="content">
+            <p>SPACE BURGER - 2022 &copy; Todos os direitos reservados.</p>
+            <div class="social">
+                <a href="#">
+                    <span class="iconify" data-icon="brandico:facebook"></span>
+                </a>
+                <a href="#">
+                    <span class="iconify" data-icon="akar-icons:instagram-fill"></span>
+                </a>
+                <a href="#">
+                    <span class="iconify" data-icon="akar-icons:twitter-fill"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./js/products.js"></script>
+    <script src="./js/cart.js"></script>
+    <script src="./js/menu.js"></script>
+    <script src="./js/navbar.js"></script>
+</body>
+
 </html>
