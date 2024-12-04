@@ -162,23 +162,31 @@ const generateOrder = () => {
         return showNoItemsInCartNotification()
     }
 
-    cart = '*Essa mensagem será enviada para o WhatsApp da lanchonete.* \n' //Remover essa mensagem quando houver um WhatsApp para enviá-la
-    cart += 'Boa noite! Gostaria de encomendar: \n'
+    // Mensagem do pedido
+    let message = '*Pedido:* \n'
+    message += 'Boa noite! Gostaria de encomendar:\n\n'
 
     generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0)
 
     generatedCart.forEach(item => {
-        cart += '- ' + item.qtd + ' ' + item.name + '\n'
+        message += '- ' + item.qtd + 'x ' + item.name + '\n'
     })
 
-    if (discountValue > 0) cart += '\nEstou utilizando o cupom: ' + promotionCode + '.'
+    if (discountValue > 0) message += `\nCupom aplicado: ${promotionCode}`
     if (deliveryValue > 0)
-        cart += '\nDesejo delivery.'
+        message += '\n*Forma de entrega:* Delivery'
     else
-        cart += '\nVou retirar no local.'
+        message += '\n*Forma de entrega:* Retirada no local'
 
-    alert(cart)
+    message += `\n\n*Total: R$ ${(allItemsValue + deliveryValue - ((allItemsValue + deliveryValue) * discountValue / 100)).toFixed(2).toString().replace('.', ',')}*`
+
+    // Encodar mensagem para URL
+    const encodedMessage = encodeURIComponent(message)
+
+    // Abrir o WhatsApp Web com a mensagem pré-preenchida
+    window.open(`https://wa.me/5588921458605?text=${encodedMessage}`, '_blank')
 }
+
 
 // Notificações dinâmicas
 const showAddItemNotification = () => {
