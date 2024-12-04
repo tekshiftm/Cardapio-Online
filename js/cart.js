@@ -19,15 +19,15 @@ const addToCart = id => {
                 item.qtd += 1
                 wasModified = true
             }
-        });
+        })
 
         !wasModified && cart.push({ id: id, qtd: 1 })
-    }
-    else
+    } else {
         cart.push({ id: id, qtd: 1 })
+    }
 
     setCart(cart)
-    notification.showToast()
+    showNotification()  // Chama a função para exibir a notificação
     showingNotifications()
 }
 
@@ -38,19 +38,21 @@ const showingNotifications = () => {
         cartNotify.style.display = 'block'
 }
 
-// Notifications
-const notification = Toastify({
-    text: "Produto adicionado no carrinho de compras.",
-    duration: 5000,
-    newWindow: true,
-    close: true,
-    gravity: "bottom",
-    position: "right",
-    stopOnFocus: true,
-    style: {
-        background: "#FF7F0A",
-        boxShadow: "0 0 160px 0 #0008"
-    }
-})
+// Função para exibir a notificação
+const showNotification = () => {
+    Toastify({
+        text: "Produto adicionado no carrinho de compras.",
+        duration: 1500,   // Duração da notificação em milissegundos
+        close: true,      // Mostrar botão de fechar
+        gravity: "bottom", // Posição vertical (topo ou fundo)
+        position: "right", // Posição horizontal (esquerda, centro ou direita)
+        stopOnFocus: true, // Pausar o temporizador ao passar o mouse
+        style: {
+            background: "#FF7F0A",
+            boxShadow: "0 0 160px 0 #0008"
+        }
+    }).showToast() // Exibe a notificação
+}
 
+// Mostrar notificação caso já existam itens no carrinho
 showingNotifications()

@@ -77,24 +77,30 @@ const addItem = id => {
     })
 
     setCart(newCartItems)
+    showAddItemNotification() // Exibir notificação ao adicionar item
     init()
 }
 
 const remItem = id => {
     const cartItems = getCart()
     const newCartItems = []
+    let itemRemoved = false // Variável para controlar se o item foi removido
 
     cartItems.forEach(item => {
-        if (item.id === id && item.qtd > 1)
+        if (item.id === id && item.qtd > 1) {
             newCartItems.push({ id: item.id, qtd: item.qtd - 1 })
-        else if (item.id === id && item.qtd <= 1)
-            itemRemovedNotification.showToast()
-        else
+        } else if (item.id === id && item.qtd <= 1) {
+            itemRemoved = true // Marca que um item foi completamente removido
+        } else {
             newCartItems.push({ id: item.id, qtd: item.qtd })
+        }
     })
 
     setCart(newCartItems)
     init()
+
+    // Exibe a notificação somente se um item foi removido
+    if (itemRemoved) showItemRemovedNotification()
 }
 
 const chooseDelivery = option => {
@@ -121,18 +127,18 @@ const addDiscount = () => {
         appliedCode.showToast()
 
         init()
-    } else codeNotFound.showToast()
+    } else showCodeNotFoundNotification()
 }
 
 const init = () => {
     const generatedCart = generateCart()
-    generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0 )
+    generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0)
 
     itemsToShow = ''
     showItems.innerHTML = ''
 
     if (generatedCart.length > 0)
-        generatedCart.forEach(data => addItemToItemsToShow(data));
+        generatedCart.forEach(data => addItemToItemsToShow(data))
     else
         itemsToShow = '<p>Você ainda não adicionou itens no carrinho.</p>'
 
@@ -145,21 +151,21 @@ const showOnPage = () => {
     const totalValue = allItemsValue + deliveryValue
     showAllItemsValue.innerHTML = 'R$ ' + allItemsValue.toFixed(2).toString().replace('.', ',')
     showDelivery.innerHTML = '+ R$ ' + deliveryValue.toFixed(2).toString().replace('.', ',')
-    showDiscount.innerHTML = '- R$ ' + ((totalValue * discountValue)/100).toFixed(2).toString().replace('.', ',')
-    showTotal.innerHTML = 'R$ ' + (totalValue - ((totalValue * discountValue)/100)).toFixed(2).toString().replace('.', ',')
+    showDiscount.innerHTML = '- R$ ' + ((totalValue * discountValue) / 100).toFixed(2).toString().replace('.', ',')
+    showTotal.innerHTML = 'R$ ' + (totalValue - ((totalValue * discountValue) / 100)).toFixed(2).toString().replace('.', ',')
 }
 
 const generateOrder = () => {
     const generatedCart = generateCart()
 
     if (generatedCart.length === 0) {
-        return noItemsInCart.showToast()
+        return showNoItemsInCartNotification()
     }
 
-    cart = '*Essa mensagem será enviada para o WhatsApp da lanchonete.* \n' //Remover essa mensagem quanto tive um WhatsApp para enviá-la
+    cart = '*Essa mensagem será enviada para o WhatsApp da lanchonete.* \n' //Remover essa mensagem quando houver um WhatsApp para enviá-la
     cart += 'Boa noite! Gostaria de encomendar: \n'
 
-    generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0 )
+    generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0)
 
     generatedCart.forEach(item => {
         cart += '- ' + item.qtd + ' ' + item.name + '\n'
@@ -174,69 +180,58 @@ const generateOrder = () => {
     alert(cart)
 }
 
-// Notifications
-const itemRemovedNotification = Toastify({
-    text: "Produto removido do carrinho de compras.",
-    duration: 5000,
-    newWindow: true,
-    close: true,
-    gravity: "bottom",
-    position: "right",
-    stopOnFocus: true,
-    style: {
-        background: "#FF7F0A",
-        boxShadow: "0 0 160px 0 #0008"
-    }
-})
+// Notificações dinâmicas
+const showAddItemNotification = () => {
+    Toastify({
+        text: "Produto adicionado ao carrinho.",
+        duration: 5000,
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "#FF7F0A",
+        }
+    }).showToast()
+}
 
-const appliedCode = Toastify({
-    text: "Cupom aplicado com sucesso!",
-    duration: 5000,
-    newWindow: true,
-    close: true,
-    gravity: "bottom",
-    position: "right",
-    stopOnFocus: true,
-    style: {
-        background: "#FF7F0A",
-        boxShadow: "0 0 160px 0 #0008"
-    }
-})
+const showItemRemovedNotification = () => {
+    Toastify({
+        text: "Produto removido do carrinho.",
+        duration: 5000,
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "#FF7F0A",
+        }
+    }).showToast()
+}
 
-const codeNotFound = Toastify({
-    text: "Cupom não encontrado!",
-    duration: 5000,
-    newWindow: true,
-    close: true,
-    gravity: "bottom",
-    position: "right",
-    stopOnFocus: true,
-    style: {
-        background: "#FF7F0A",
-        boxShadow: "0 0 160px 0 #0008"
-    }
-})
+const showCodeNotFoundNotification = () => {
+    Toastify({
+        text: "Cupom não encontrado.",
+        duration: 5000,
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "#FF7F0A",
+        }
+    }).showToast()
+}
 
-const noItemsInCart = Toastify({
-    text: "Não é possível gerar pedido sem ter item no carrinho.",
-    duration: 5000,
-    newWindow: true,
-    close: true,
-    gravity: "bottom",
-    position: "right",
-    stopOnFocus: true,
-    style: {
-        background: "#FF7F0A",
-        boxShadow: "0 0 160px 0 #0008"
-    }
-})
+const showNoItemsInCartNotification = () => {
+    Toastify({
+        text: "Não é possível gerar pedido sem itens.",
+        duration: 1500,
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "#FF7F0A",
+        }
+    }).showToast()
+}
 
 btnAddPromotionCode.addEventListener('click', addDiscount)
-btnWantDelivery.addEventListener('click', function () { chooseDelivery(true) })
-btnDontWantDelivery.addEventListener('click', function () { chooseDelivery(false) })
+btnWantDelivery.addEventListener('click', () => chooseDelivery(true))
+btnDontWantDelivery.addEventListener('click', () => chooseDelivery(false))
 btnGenerateOrder.addEventListener('click', generateOrder)
 
 init()
-
-// Easter Egg
-console.log('Você achou o Easter Egg do site =D\nUse o cupom EASTEREGG e ganhe 15% de desconto!')
