@@ -25,6 +25,19 @@ let deliveryValue = 0
 let discountValue = 0
 const promotionCode = 'easteregg'
 
+// Função para obter a saudação com base no horário
+const getGreeting = () => {
+    const currentHour = new Date().getHours()
+    
+    if (currentHour >= 5 && currentHour < 12) {
+        return "Bom dia!"
+    } else if (currentHour >= 12 && currentHour < 18) {
+        return "Boa tarde!"
+    } else {
+        return "Boa noite!"
+    }
+}
+
 // Functions
 const generateCart = () => {
     const cartItems = getCart()
@@ -164,7 +177,7 @@ const generateOrder = () => {
 
     // Mensagem do pedido
     let message = '*Pedido:* \n'
-    message += 'Boa noite! Gostaria de encomendar:\n\n'
+    message += `${getGreeting()} Gostaria de encomendar:\n\n` // Aqui usamos a saudação dinâmica
 
     generatedCart.length > 0 && generatedCart.sort((a, b) => a.type < b.type ? -1 : a.type > b.type ? 1 : 0)
 
@@ -186,7 +199,6 @@ const generateOrder = () => {
     // Abrir o WhatsApp Web com a mensagem pré-preenchida
     window.open(`https://wa.me/5588921458605?text=${encodedMessage}`, '_blank')
 }
-
 
 // Notificações dinâmicas
 const showAddItemNotification = () => {
