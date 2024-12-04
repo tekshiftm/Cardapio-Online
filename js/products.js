@@ -42,15 +42,6 @@ const products = [
         img: 'xtudo.png'
     },
     {
-        id: 4,
-        type: 1,
-        name: 'X-Promo',
-        description: 'Pão, hamburger, ovo, bacon, queijo prato, presunto, cebola caramelizada, picles, alface, tomate e molho especial.',
-        price: 19.99,
-        lastPrice: 25.00,
-        img: 'burger.png'
-    },
-    {
         id: 101,
         type: 2,
         name: 'Combo Simples',
