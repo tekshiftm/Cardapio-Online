@@ -11,6 +11,10 @@ body {
   overflow-x: hidden;
   background: #FFFFFF;
 }
+.caju-icon {
+  width: 80px;  /* Ajuste o tamanho conforme necessário */
+  height: auto;
+}
 
 html {
   scroll-behavior: smooth;
